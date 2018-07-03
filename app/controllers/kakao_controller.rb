@@ -1,8 +1,10 @@
+require 'parse' # 자동으로 helper폴더 내에있는 parse를 찾는다. 이로써 module 로써 호출이 가능.
+
 class KakaoController < ApplicationController
   def keyboard
     @keyboard = {
       :type => "buttons",
-      :buttons => ["메뉴", "로또번호추천", "고양이"] 
+      :buttons => ["메뉴", "로또번호추천", "고양이",] 
     }
     
     render json: @keyboard
@@ -19,11 +21,7 @@ class KakaoController < ApplicationController
       # @text = "#{(1..45).to_a.sample(6).sort}"
       @text = (1..45).to_a.sample(6).sort.to_s
     elsif @user_msg == "고양이"
-      @url = "http://thecatapi.com/api/images/get?format=xml&type=jpg"
-      @cat_xml = RestClient.get(@url)
-      @cat_doc = Nokogiri::XML(@cat_xml)
-      @cat_url = @cat_doc.xpath("//url").text
-      @text = @cat_url
+      @cat_url = Parse::Animal.cat
     end
   
     @return_msg = {
